@@ -24,7 +24,7 @@ public class ExeclWrite {
     /**
      * 将连中3期之间的距离计算写到execl中
      */
-    public void write_jvli(List<String> list_jvli) {
+    public void write_jvli(List<Map<String, String>> list_jvli) {
         //创建HSSFWorkbook对象
         XSSFWorkbook wb = new XSSFWorkbook();
         //创建HSSFSheet对象
@@ -33,15 +33,18 @@ public class ExeclWrite {
         font.setColor(HSSFColor.RED.index);
         XSSFCellStyle cellStyle = wb.createCellStyle();
         cellStyle.setFont(font);
-
-        for (int i = 0; i < list_jvli.size(); i++) {
-            //System.out.println("正在写入中: "+i+",size: "+list_jvli.size());
+        XSSFRow row0 = sheet.createRow(0);
+        row0.createCell(0).setCellValue("IsZhong");
+        row0.createCell(1).setCellValue("fail_count");
+        for (int i = 1; i < list_jvli.size() + 1; i++) {
             XSSFRow row = sheet.createRow(i);
-            row.createCell(0).setCellValue(list_jvli.get(i));
+            Map<String, String> map = list_jvli.get(i-1);
+            row.createCell(0).setCellValue(map.get("IsZhong"));
+            row.createCell(1).setCellValue(map.get("fail_count"));
             System.out.println("正在写入中: " + i);
         }
         //输出Excel文件
-        FileOutputStream output = null;
+        FileOutputStream output;
         try {
             output = new FileOutputStream(output_jvli_filepath);
             wb.write(output);

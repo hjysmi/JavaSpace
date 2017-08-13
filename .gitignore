@@ -1,0 +1,8 @@
+# Java class files
+*.class
+JavaSpace.iml
+# Generated files
+bin/
+gen/
+out/
+.idea/

@@ -54,7 +54,7 @@ public class ClosingPriceDao {
         List<String> queDingfangan = Utils.getArrayToList(Utils.getFromAssets());//决定的方案
         int i = 0, lianzhong_count = 0;
         int fail_count=0;
-        List<String> list_jvli = new ArrayList<>();
+        List<Map<String,String>> list_jvli = new ArrayList<>();
         //Map<String, Object> map_6 = list.get(6372);
         while (true) {
             if (i >= write.read_lastId()) break;
@@ -79,17 +79,26 @@ public class ClosingPriceDao {
                     //连中三期
                     if (lianzhong_count == 3) {
                         System.out.println("连中3次了,id:" + price_j.getId() + ",qihao:" + price_j.getQihao());
-                        list_jvli.add("连中3次了,id:" + price_j.getId() + ",qihao:" + price_j.getQihao());
+                        Map map_fail = new HashMap();
+                        map_fail.put("fail_count","连挂"+String.valueOf(fail_count)+"期");
+                        map_fail.put("IsZhong","连中3次了 ,qihao:" + price_j.getQihao());
+                        list_jvli.add(map_fail);
                         lianzhong_count = 0;
                         fail_count = 0;
 
                     }
                 } else {
                     //没中
-                    lianzhong_count = 0;
                     fail_count++;
                     System.out.println("挂了, qihao:" + price_j.getQihao());
-                    list_jvli.add("挂了, qihao:" + price_j.getQihao());
+                    Map map_fail = new HashMap();
+                    map_fail.put("fail_count",String.valueOf(fail_count));
+                    map_fail.put("IsZhong","挂了, qihao:" + price_j.getQihao());
+                    list_jvli.add(map_fail);
+                    //map_fail.clear();
+                    lianzhong_count = 0;
+
+
                 }
             }
             i = i + 2;
